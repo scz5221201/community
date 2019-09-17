@@ -29,7 +29,7 @@ public class AuthorizeController {
     @Value("${github.client_secret}")
     private String clientSecret;
     @Value("${github.redirect_uri}")
-    private String redirect_uir;
+    private String redirect_uri;
 
     @Autowired
     private UserMapper userMapper;
@@ -43,11 +43,11 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
-        accessTokenDTO.setRedirect_uri(redirect_uir);
+        accessTokenDTO.setRedirect_uri(redirect_uri);
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getGithubUser(accessToken);
-        if (githubUser != null) {
+        if (githubUser != null && githubUser.getId() != null) {
             User user = new User();
             user.setToken(UUID.randomUUID().toString());
             user.setName(githubUser.getName());
